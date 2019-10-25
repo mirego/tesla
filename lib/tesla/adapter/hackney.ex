@@ -33,7 +33,7 @@ if Code.ensure_loaded?(:hackney) do
         {:ok, %{env | status: status, headers: format_headers(headers), body: format_body(body)}}
       else
         {:error, :timeout} ->
-          {:error, {:timeout, %{env | status: nil, headers: nil, body: nil}}}
+          {:error, {:timeout, env}}
 
         error ->
           error
