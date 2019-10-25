@@ -13,6 +13,19 @@ defmodule Tesla.Adapter.HackneyTest do
 
   alias Tesla.Env
 
+  test "timeout get request" do
+    request = %Env{
+      method: :get,
+      url: "#{@http}/delay/2"
+    }
+
+    assert {:error, {:timeout, %Env{} = response}} = call(request, recv_timeout: 1000)
+    assert response.url == "#{@http}/delay/2"
+    assert is_nil(response.status)
+    assert is_nil(response.body)
+    assert Enum.empty?(response.headers)
+  end
+
   test "get with `with_body: true` option" do
     request = %Env{
       method: :get,

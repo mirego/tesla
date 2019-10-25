@@ -31,6 +31,12 @@ if Code.ensure_loaded?(:hackney) do
     def call(env, opts) do
       with {:ok, status, headers, body} <- request(env, opts) do
         {:ok, %{env | status: status, headers: format_headers(headers), body: format_body(body)}}
+      else
+        {:error, :timeout} ->
+          {:error, {:timeout, env}}
+
+        error ->
+          error
       end
     end
 
